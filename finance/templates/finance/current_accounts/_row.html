@@ -1,0 +1,13 @@
+{% load ui %}<tr id="current_account_{{ current_account.pk }}" class="hover:bg-slate-50">
+  <td class="whitespace-nowrap px-4 py-3">{{ current_account.date_ocurrence|br_date }}</td>
+  <td class="px-4 py-3">{{ current_account.name_account }}</td>
+  <td class="px-4 py-3">{{ current_account.name_cost }}</td>
+  <td class="px-4 py-3 text-slate-600">{{ current_account.historic|default_if_none:"" }}</td>
+  <td class="whitespace-nowrap px-4 py-3 text-right font-medium {% if current_account.is_credit %}text-emerald-700{% else %}text-red-700{% endif %}">
+    {{ current_account.signed_price|currency }}
+  </td>
+  <td class="whitespace-nowrap px-4 py-3 text-right">
+    <a class="link" href="{% url 'current_account' current_account.pk %}">Ver</a>
+    <a class="link ml-2" href="{% url 'edit_current_account' current_account.pk %}">Editar</a>
+  </td>
+</tr>

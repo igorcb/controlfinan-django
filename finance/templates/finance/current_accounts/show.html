@@ -1,0 +1,22 @@
+{% extends "finance/base.html" %}{% load ui %}
+{% block title %}Lançamento{% endblock %}
+{% block content %}
+<h1 class="mb-6 text-2xl font-semibold">Lançamento</h1>
+
+<div class="card">
+  <dl class="grid gap-4 text-sm sm:grid-cols-2">
+    <div><dt class="text-slate-500">Data</dt><dd class="font-medium">{{ current_account.date_ocurrence|br_date }}</dd></div>
+    <div><dt class="text-slate-500">Tipo</dt><dd class="font-medium">{{ current_account.type_launche_name }}</dd></div>
+    <div><dt class="text-slate-500">Conta</dt><dd class="font-medium">{{ current_account.name_account }}</dd></div>
+    <div><dt class="text-slate-500">Categoria</dt><dd class="font-medium">{{ current_account.name_cost }}</dd></div>
+    <div><dt class="text-slate-500">Valor</dt><dd class="font-medium {% if current_account.is_credit %}text-emerald-700{% else %}text-red-700{% endif %}">{{ current_account.signed_price|currency }}</dd></div>
+    <div><dt class="text-slate-500">Histórico</dt><dd class="font-medium">{{ current_account.historic|default:"—" }}</dd></div>
+  </dl>
+
+  <div class="mt-6 flex flex-wrap gap-3">
+    <a class="btn-primary" href="{% url 'edit_current_account' current_account.pk %}">Editar</a>
+    <a class="btn-secondary" href="{% url 'current_accounts' %}">Voltar</a>
+    <form class="button_to" method="post" action="{% url 'destroy_current_account' current_account.pk %}" data-confirm="Excluir este lançamento?">{% csrf_token %}<button class="btn-danger" type="submit">Excluir</button></form>
+  </div>
+</div>
+{% endblock %}

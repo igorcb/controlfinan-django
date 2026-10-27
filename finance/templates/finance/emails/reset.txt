@@ -1,0 +1,4 @@
+Você pode redefinir sua senha em
+{{ url }}
+
+Este link expira em {{ expires_in }}.

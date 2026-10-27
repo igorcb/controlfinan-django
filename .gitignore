@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.env
+staticfiles/
+finance/static/finance/css/app.css
+.pytest_cache/
+.ruff_cache/

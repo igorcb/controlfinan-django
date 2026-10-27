@@ -1,0 +1,8 @@
+line-length = 130
+target-version = "py312"
+extend-exclude = ["finance/migrations"]
+
+[lint]
+select = ["E", "F", "I", "B", "UP", "DJ"]
+# Nullable text columns are intentional: the schema is shared with the Rails app, which stores NULL.
+ignore = ["DJ001"]
