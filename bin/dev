@@ -1,7 +1,7 @@
 #!/bin/sh
 # Development: build the CSS, keep watching it, migrate and run the Django dev server.
 set -e
-tailwindcss -i finance/static/finance/css/app.tailwind.css -o finance/static/finance/css/app.css
-tailwindcss -i finance/static/finance/css/app.tailwind.css -o finance/static/finance/css/app.css --watch=always &
+tailwindcss -i finance/assets/app.tailwind.css -o finance/static/finance/css/app.css
+tailwindcss -i finance/assets/app.tailwind.css -o finance/static/finance/css/app.css --watch=always &
 python manage.py migrate --noinput
 exec python manage.py runserver 0.0.0.0:8000

@@ -5,3 +5,5 @@ staticfiles/
 finance/static/finance/css/app.css
 .pytest_cache/
 .ruff_cache/
+benchmark/results/*
+!benchmark/results/RESULTS.md

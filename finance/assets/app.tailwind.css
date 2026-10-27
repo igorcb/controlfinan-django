@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@source "../../../";
+@source "../";
 
 @layer components {
   .btn-primary, .btn-secondary, .btn-danger {

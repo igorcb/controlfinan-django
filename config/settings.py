@@ -73,6 +73,12 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+# Production: fingerprinted and compressed files, like Rails' assets:precompile.
+if not DEBUG:
+    STORAGES = {
+        "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+        "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+    }
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
