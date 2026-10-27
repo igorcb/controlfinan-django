@@ -22,4 +22,4 @@ Stack: Rails 8.1 + Hotwire + Puma | Django 5.2 + Gunicorn | PostgreSQL 16 | Tail
 
 ---
 
-Números completos: [benchmark/results/RESULTS.md](../benchmark/results/RESULTS.md)
+Números completos: [controlfinan-rails8-hotwire/benchmark](https://github.com/igorcb/controlfinan-rails8-hotwire/tree/main/benchmark)

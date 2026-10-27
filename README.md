@@ -13,7 +13,7 @@ Esta é a versão em **Django** do [ControlFinan em Rails 8 + Hotwire](https://g
 
 - [Funcionalidades](#funcionalidades)
 - [Como a paridade foi feita](#como-a-paridade-foi-feita)
-- [Benchmark: Rails x Django](#benchmark-rails-x-django)
+- [Benchmark](#benchmark)
 - [Como rodar com Docker](#como-rodar-com-docker)
 - [Testes](#testes)
 - [Estrutura](#estrutura)
@@ -50,70 +50,9 @@ Cada usuário só enxerga os próprios lançamentos.
 - Lista, dashboard e formulário idênticos **pixel a pixel**, no celular (390 px) e no computador.
 - Mesmo resultado em criar, editar e excluir, mensagens de validação, login inválido, erros de cadastro e JSON.
 
-## Benchmark: Rails x Django
+## Benchmark
 
-Mesmo app (paridade de telas e regras) e mesmos dados (7.174 lançamentos), os dois em **modo produção**:
-
-- **Rails 8.1** com Puma (Ruby 3.4 com YJIT, padrão do Rails 8) e **Django 5.2** com Gunicorn `gthread` (Python 3.12).
-- Cada app com **2 processos × 5 threads**, limitado a **2 CPUs e 1 GB de RAM**, cada um com o seu Postgres 16 (2 CPUs).
-- Carga com **k6**: 20 usuários simultâneos, logados de verdade pelo formulário de login, 10 s de aquecimento e 30 s medidos por tela.
-
-### Requisições por segundo e latência
-
-
-| Tela | App | req/s | p50 (ms) | p95 (ms) | p99 (ms) | erros | CPU média | memória pico |
-|---|---|---:|---:|---:|---:|---:|---:|---:|
-| Conta Corrente (30 itens + saldo) | Rails | 104 | 193.8 | 244.1 | 286.4 | 0.0% | 191% | 264 MiB |
-| Conta Corrente (30 itens + saldo) | Django | 84 | 238.4 | 286.2 | 592.5 | 0.0% | 195% | 103 MiB |
-| Saldo do dia (filtro) | Rails | 251 | 79.1 | 95.7 | 110.5 | 0.0% | 192% | 272 MiB |
-| Saldo do dia (filtro) | Django | 123 | 118.7 | 394.3 | 447.1 | 0.0% | 200% | 103 MiB |
-| Dashboard do mês | Rails | 169 | 113.2 | 175.1 | 193.0 | 0.0% | 194% | 276 MiB |
-| Dashboard do mês | Django | 129 | 130.4 | 361.2 | 440.0 | 0.0% | 198% | 106 MiB |
-| API JSON (30 itens) | Rails | 304 | 63.9 | 81.8 | 109.1 | 0.0% | 188% | 299 MiB |
-| API JSON (30 itens) | Django | 253 | 52.4 | 150.1 | 405.1 | 0.0% | 196% | 106 MiB |
-| Criar lançamento (POST) | Rails | 403 | 49.1 | 60.7 | 66.0 | 0.0% | 203% | 312 MiB |
-| Criar lançamento (POST) | Django | 253 | 56.3 | 173.0 | 207.6 | 0.0% | 201% | 106 MiB |
-
-## Quem foi mais rápido (req/s)
-
-| Tela | Mais rápido |
-|---|---|
-| Conta Corrente (30 itens + saldo) | Rails (1.2x) |
-| Saldo do dia (filtro) | Rails (2.0x) |
-| Dashboard do mês | Rails (1.3x) |
-| API JSON (30 itens) | Rails (1.2x) |
-| Criar lançamento (POST) | Rails (1.6x) |
-
-## Boot, memória e imagem
-
-| | Rails | Django |
-|---|---:|---:|
-| Subir até responder `/up` (inclui migrations) | 4.9 s | 2.7 s |
-| Memória parado (2 processos) | 125 MiB | 82 MiB |
-| Tamanho da imagem Docker | 515 MB | 168 MB |
-
-## Código
-
-| | Rails | Django |
-|---|---:|---:|
-| Linhas de código do app (sem linhas em branco) | 787 | 1039 |
-| Linhas de teste | 0 | 392 |
-
-### Leitura dos resultados
-
-- **Velocidade:** o Rails respondeu mais requisições por segundo em todas as telas (de 1,2x a 2x) e com latência mais estável (p95 e p99 menores). Os dois apps usaram as 2 CPUs inteiras, então o limite foi o processamento do próprio app.
-- **Recursos:** o Django subiu mais rápido, usou cerca de 3x menos memória e gerou uma imagem Docker 3x menor.
-- **Ressalvas:** uma rodada, numa máquina de desenvolvimento. O Ruby roda com YJIT (JIT ligado por padrão no Rails 8) e o Python 3.12 sem JIT. Cada stack usou a configuração padrão de produção.
-
-### Rodar o benchmark
-
-Com o [Rails Hotwire](https://github.com/igorcb/controlfinan-rails8-hotwire) clonado ao lado deste repositório e o banco de desenvolvimento dele no ar (fonte dos dados compartilhados):
-
-```bash
-./benchmark/run.sh
-```
-
-O resultado fica em `benchmark/results/RESULTS.md`.
+O benchmark que compara as seis versões do ControlFinan (Rails, Django, Laravel, Go, Java e Rust), com os mesmos dados e os mesmos limites de CPU e memória, fica no repositório do app de referência: [controlfinan-rails8-hotwire/benchmark](https://github.com/igorcb/controlfinan-rails8-hotwire/tree/main/benchmark).
 
 ## Como rodar com Docker
 
@@ -163,7 +102,6 @@ finance/templates/finance/  telas (mesmo HTML/Tailwind do Rails)
 finance/assets/             fonte do Tailwind
 finance/static/finance/     JS e ícones
 tests/                      testes com pytest e factory_boy
-benchmark/                  benchmark Rails x Django (Docker Compose + k6)
 Dockerfile.prod             imagem de produção (Gunicorn + WhiteNoise)
 ```
 
